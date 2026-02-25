@@ -31,15 +31,47 @@ public class Warrior extends Character implements Attacker{
 
 
     @Override
-    public void attack(Character character) {
-        if(!isAlive() || this.stamina ==0){
-            System.out.println("This character cant attack");
+    public void attack(Character target) {
+        if (!isAlive()) {
+            System.out.println(getName() + " is dead and can't attack!");
+            return;
         }
 
-        else{
-            System.out.println(" Attacked succesfully ");
-            character.setHp(character.getHp()-strength);
-            this.stamina--;
+        Random rand = new Random();
+        boolean chooseHeavy = rand.nextBoolean(); // random heavy or weak
+
+        if (chooseHeavy) {
+            if (stamina >= 5) {
+                target.setHp(target.getHp() - strength);
+                stamina -= 5;
+                System.out.println(getName() + " performs Heavy Attack on " + target.getName() + " for " + strength + " damage! Stamina: " + stamina);
+            } else {
+                if (stamina > 0) {
+                    int damage = strength / 2;
+                    target.setHp(target.getHp() - damage);
+                    stamina += 1;
+                    System.out.println(getName() + " has low stamina, performs Weak Attack on " + target.getName() + " for " + damage + " damage! Stamina: " + stamina);
+                } else {
+                    stamina += 2; // recover
+                    System.out.println(getName() + " has no stamina to attack, recovers 2 stamina. Current Stamina: " + stamina);
+                }
+            }
+        } else {
+            // Attempt Weak attack
+            if (stamina > 0) {
+                int damage = strength / 2;
+                target.setHp(target.getHp() - damage);
+                stamina += 1;
+                System.out.println(getName() + " performs Weak Attack on " + target.getName() + " for " + damage + " damage! Stamina: " + stamina);
+            } else {
+                stamina += 2; // recover
+                System.out.println(getName() + " has no stamina to attack, recovers 2 stamina. Current Stamina: " + stamina);
+            }
+        }
+
+        // Update target alive status
+        if (target.getHp() <= 0) {
+            target.setAlive(false);
         }
     }
 }
