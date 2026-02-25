@@ -29,7 +29,22 @@ public class Wizard extends Character implements Attacker {
     }
 
     @Override
-    public void attack(Character character) {
+    public void attack(Character target) {
+        if (mana >= 5) {
+            target.setHp(target.getHp() - intelligence);
+            mana -= 5;
+            System.out.println(getName() + " casts Fireball on " + target.getName() + " for " + intelligence + " damage!");
+        } else if (mana > 0) {
+            target.setHp(target.getHp() - 2);
+            mana += 1;
+            System.out.println(getName() + " hits " + target.getName() + " with staff for 2 damage!");
+        } else {
+            mana += 2;
+            System.out.println(getName() + " has no mana to attack, recovers 2 mana!");
+        }
 
+        if (target.getHp() <= 0) {
+            target.setAlive(false);
+        }
     }
 }
